@@ -14,6 +14,8 @@ from skimage.filters import median
 from skimage.morphology import square
 from skimage.util import pad
 import warnings
+import logging
+logging.basicConfig(level=logging.WARN)
 
 warnings.filterwarnings("ignore")
 
@@ -60,7 +62,7 @@ class BaseVolume_dicom(dict):
         self[name] = val
         self["output"].append(name)
         if name != 'Name of Images' and il != 170:
-            print('%s-%s. The %s of the patient with the name of <%s> is %s' % (ol,il,name, v[1]['ID'], val))
+            logging.debug('%s-%s. The %s of the patient with the name of <%s> is %s' % (ol,il,name, v[1]['ID'], val))
 
 
 class BaseVolume_nondicom(dict):
@@ -100,7 +102,7 @@ class BaseVolume_nondicom(dict):
         self[name] = val
         self["output"].append(name)
         if name != 'Name of Images' and il != 170:
-            print('%s-%s. The %s of the patient with the name of <%s> is %s' % (ol,il,name, v[1], val))
+            logging.debug('%s-%s. The %s of the patient with the name of <%s> is %s' % (ol,il,name, v[1], val))
 
 def vol(v, sample_size, i):
     switcher={

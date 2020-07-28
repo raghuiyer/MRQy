@@ -20,8 +20,10 @@ from scipy.cluster.vq import whiten
 from sklearn.manifold import TSNE
 import umap
 import scipy
-import warnings        
+import warnings
+import logging        
 warnings.filterwarnings("ignore")    # remove all warnings like conversion thumbnails
+logging.basicConfig(level=logging.WARN)
 
 nfiledone = 0
 csv_report = None
@@ -30,7 +32,7 @@ headers = []
 
 
 def patient_name(root):
-    print('MRQy is starting....')
+    logging.warn('MRQy is starting....')
     files = [os.path.join(dirpath,filename) for dirpath, _, filenames in os.walk(root) 
             for filename in filenames 
             if filename.endswith('.dcm') 
@@ -57,7 +59,7 @@ def patient_name(root):
     ind = [0] + list(accumulate(subjects_number))
     splits = [dicoms[ind[i]:ind[i+1]] for i in range(len(ind)-1)]
     subjects = subjects_id + mhas_subjects
-    print('The number of patients is {}'.format(len(subjects)))
+    logging.warn('The number of patients is {}'.format(len(subjects)))
     return files, subjects, splits, mhas, mhas_subjects
 
 
@@ -101,15 +103,15 @@ def saveThumbnails_dicom(v, output):
     os.makedirs(output + os.sep + v[1]['ID'])
     for i in range(len(v[0])):
         plt.imsave(output + os.sep + v[1]['ID'] + os.sep + v[1]['ID'] + '(%d).png' % i, v[0][i], cmap = cm.Greys_r)
-        # print('image number %d out of %d is saved to %s' % (int(i+1), len(v[0]),output + os.sep + v[1]['ID']))
-    print('The number of %d images are saved to %s' % (len(v[0]),output + os.sep + v[1]['ID']))
+        # logging.debug('image number %d out of %d is saved to %s' % (int(i+1), len(v[0]),output + os.sep + v[1]['ID']))
+    logging.warn('The number of %d images are saved to %s' % (len(v[0]),output + os.sep + v[1]['ID']))
     
 def saveThumbnails_nondicom(v, output):
     os.makedirs(output + os.sep + v[1])
     for i in range(len(v[0])):
         plt.imsave(output + os.sep + v[1] + os.sep + v[1] + '(%d).png' % int(i+1), scipy.ndimage.rotate(v[0][i],270), cmap = cm.Greys_r)
-        # print('image number %d out of %d is saved to %s' % (int(i+1), len(v[0]),output + os.sep + v[1]))
-    print('The number of %d images are saved to %s' % (len(v[0]),output + os.sep + v[1]))
+        # logging.debug('image number %d out of %d is saved to %s' % (int(i+1), len(v[0]),output + os.sep + v[1]))
+    logging.warn('The number of %d images are saved to %s' % (len(v[0]),output + os.sep + v[1]))
 
 def worker_callback(s,fname_outdir):
     global csv_report, first, nfiledone
@@ -125,7 +127,7 @@ def worker_callback(s,fname_outdir):
     csv_report.write("\t".join([str(s[field]) for field in s["output"]])+"\n")
     csv_report.flush()
     nfiledone += 1
-    print('The results are updated.')
+    logging.warn('The results are updated.')
     
 
 
@@ -174,7 +176,7 @@ def print_msg_box(msg, indent=1, width=None, title=None):
         box += f'║{space}{"-" * len(title):<{width}}{space}║\n'  
     box += ''.join([f'║{space}{line:<{width}}{space}║\n' for line in lines])
     box += f'╚{"═" * (width + indent * 2)}╝' 
-    print(box)   
+    logging.warn(box)   
     
     
 
@@ -207,7 +209,7 @@ if __name__ == '__main__':
         dicom_flag = False
         nondicom_flag = True
     if len(dicom_spil) == 0 and len(nondicom_spli) == 0:
-        print('The input folder is empty!')
+        logging.error('The input folder is empty!')
     
     for i in range(len(names)):
         if dicom_flag:
@@ -230,9 +232,9 @@ if __name__ == '__main__':
     cleanup(address, 30)
     
     
-    print("Done!")
-    print("MRQy program took", format((time.time() - start_time)/60, '.2f'), \
-          "minutes for {} subjects and the overal {} MRI slices to run.".format(len(names),len(patients)))
+    logging.warn("Done!")
+    runtime = format((time.time() - start_time)/60, '.2f')
+    logging.warn("MRQy program took {} minutes for {} subjects and the overal {} MRI slices to run.".format(runtime, len(names),len(patients)))
     
     msg = "Please go to the '{}' directory and open up the 'index.html' file.\n".format(print_forlder_note) + \
     "Click on 'View Results' and select '{}' file.\n".format(fname_outdir + os.sep + "results.tsv") 

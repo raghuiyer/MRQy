@@ -21,7 +21,7 @@ from sklearn.manifold import TSNE
 import umap
 import scipy
 import warnings
-import logging        
+import logging      
 warnings.filterwarnings("ignore")    # remove all warnings like conversion thumbnails
 logging.basicConfig(level=logging.WARN)
 
@@ -194,7 +194,7 @@ if __name__ == '__main__':
     args = parser.parse_args() 
     root = args.inputdir[0]
     print_forlder_note = os.getcwd() + os.sep + 'UserInterface' 
-    fname_outdir = print_forlder_note + os.sep + 'Data' + os.sep + args.output_folder_name
+    fname_outdir = print_forlder_note + os.sep + 'Data' + os.sep + args.output_folder_name + '_' + time.strftime("%m%d%Y%H:%M:%S")
     overwrite_flag = "w"        
     headers.append(f"outdir:\t{os.path.realpath(fname_outdir)}") 
     patients, names, dicom_spil, nondicom_spli, nondicom_names = patient_name(root)

@@ -29,7 +29,7 @@ nfiledone = 0
 csv_report = None
 first = True
 headers = []
-
+overwrite_flag = "w"  
 
 def parse_patient_names(root):
     logging.warning('MRQy is starting at ' + root)
@@ -178,9 +178,10 @@ def print_msg_box(msg, indent=1, width=None, title=None):
     box += f'╚{"═" * (width + indent * 2)}╝' 
     logging.warning(box)   
     
-    
-
-if __name__ == '__main__':
+"""
+main function container TODO add more comments on args 
+"""    
+def main(): 
     start_time = time.time()
     headers.append(f"start_time:\t{datetime.datetime.now()}")
     parser = argparse.ArgumentParser(description='')
@@ -194,8 +195,7 @@ if __name__ == '__main__':
     args = parser.parse_args() 
     root = args.inputdir[0]
     print_forlder_note = os.getcwd() + os.sep + 'UserInterface' 
-    fname_outdir = print_forlder_note + os.sep + 'Data' + os.sep + args.output_folder_name + '_' + time.strftime("%m%d%Y%H:%M:%S")
-    overwrite_flag = "w"        
+    fname_outdir = print_forlder_note + os.sep + 'Data' + os.sep + args.output_folder_name + '_' + time.strftime("%m%d%Y%H:%M:%S")      
     headers.append(f"outdir:\t{os.path.realpath(fname_outdir)}") 
     patients, names, dicom_spil, nondicom_spli, nondicom_names = parse_patient_names(root)
 
@@ -240,5 +240,8 @@ if __name__ == '__main__':
     "Click on 'View Results' and select '{}' file.\n".format(fname_outdir + os.sep + "results.tsv") 
           
     print_msg_box(msg, indent=3, width=None, title="To view the final MRQy interface results:")
+
+if __name__ == '__main__':
+    main()
     
     

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "4410a225eccf90b78bf2745207c96ba3b507737d4d370b9f04350dcd1312675a"
+            "sha256": "b766085bbf8f085496e3af3bd7b97b4663737a7672153c7bf4ee50be9e7f0da4"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -158,8 +158,8 @@
             "version": "==8.4.0"
         },
         "mrqy": {
-            "editable": true,
-            "path": "."
+            "path": ".",
+            "version": "==0.0.0"
         },
         "networkx": {
             "hashes": [

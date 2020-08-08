@@ -15,6 +15,7 @@ scikit-learn = "*"
 umap-learn = "*"
 scikit-image = "*"
 pandas = "*"
+mrqy = {editable = true, path = "."}
 
 [requires]
 python_version = "3.6"
